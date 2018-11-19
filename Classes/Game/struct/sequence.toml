@@ -1,0 +1,16 @@
+#
+# game sequence struct
+#
+namespace = "Game"
+struct_name = "Sequence"
+
+lua = true
+
+[[member]]
+name = "stage"
+type = "bit-enum"
+cast = "StageType"
+bits = 6
+enum = ["Title","InGame"]
+initial = "Title"
+[[member]]
