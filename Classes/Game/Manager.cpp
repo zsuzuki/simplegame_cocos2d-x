@@ -7,6 +7,7 @@
 
 #include "Manager.hpp"
 #include "SequenceList.hpp"
+#include "context.hpp"
 #include "mode.h"
 #include <memory>
 #include <sol.hpp>
@@ -16,13 +17,12 @@ namespace Game
 {
 namespace
 {
-Manager s_manager;
-
 //
 struct Implement
 {
   using SequenceStack = std::vector<SequenceMode>;
   sol::state    lua;
+  Context       context;
   SequenceStack sequence;
   SequenceMode  request = SequenceMode::None;
   ModePtr       mode;
@@ -91,8 +91,16 @@ struct Implement
 std::unique_ptr<Implement> impl;
 } // namespace
 
-Manager::Manager() {}
-Manager::~Manager() {}
+//
+// interface
+//
+
+//
+Context&
+Manager::getContext()
+{
+  return impl->context;
+}
 
 // 初期化
 void
@@ -125,12 +133,5 @@ void
 Manager::update(float dt)
 {
   impl->updateMode(dt);
-}
-
-//
-Manager&
-Manager::getInstance()
-{
-  return s_manager;
 }
 } // namespace Game

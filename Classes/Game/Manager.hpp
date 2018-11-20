@@ -12,26 +12,23 @@
 
 namespace Game
 {
-
 enum class SequenceMode : uint8_t;
+class Context;
 
 //
 // Game control class
 //
-class Manager
+namespace Manager
 {
-public:
-  Manager();
-  ~Manager();
+void setup(SequenceMode sm);
+void update(float dt);
 
-  static void setup(SequenceMode sm);
-  static void update(float dt);
+Context& getContext();
 
-  static void         requestSequence(SequenceMode ss,bool jump = false);
-  static SequenceMode getReturnSequence();
+void         requestSequence(SequenceMode ss, bool jump = false);
+SequenceMode getReturnSequence();
+} // namespace Manager
 
-  static Manager& getInstance();
-};
 } // namespace Game
 
 #endif /* Manager_hpp */

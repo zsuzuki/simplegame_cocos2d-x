@@ -11,8 +11,13 @@
 #include "Game/SequenceList.hpp"
 #include <cstdint>
 
+namespace Game {
+    class Context;
+}
+
 void SwitchMode(Game::SequenceMode mode);
 void ReturnMode();
 void GameUpdate(float dt);
+Game::Context& GetGameContext();
 
 #endif /* GameSupport_hpp */

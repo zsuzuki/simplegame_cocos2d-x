@@ -23,6 +23,8 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "Game/Status.hpp"
+#include "Game/context.hpp"
 #include "GameSupport.hpp"
 #include "SimpleAudioEngine.h"
 
@@ -71,7 +73,7 @@ HelloWorld::init()
   menu->setPosition(Vec2::ZERO);
   this->addChild(menu, 1);
 
-  auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+  auto label = Label::createWithTTF("Touch to START", "fonts/Marker Felt.ttf", 24);
   if (label == nullptr)
   {
     problemLoading("'fonts/Marker Felt.ttf'");
@@ -79,7 +81,8 @@ HelloWorld::init()
   else
   {
     // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height));
+    label->setPosition(
+        Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 3 - label->getContentSize().height));
 
     // add the label as a child to this layer
     this->addChild(label, 1);
@@ -98,6 +101,20 @@ HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+  }
+
+  {
+    auto& ctx  = GetGameContext();
+    auto  stat = ctx.get<Game::Status>("stat");
+    if (stat)
+    {
+      char buff[128];
+      snprintf(buff, sizeof(buff), "Score: %d", stat->getScore());
+      auto l = Label::createWithTTF(buff, "fonts/Marker Felt.ttf", 24);
+      auto h = visibleSize.height;
+      l->setPosition({origin.x + visibleSize.width / 2, origin.y + (h - h / 3)});
+      this->addChild(l);
+    }
   }
 
   auto listener = EventListenerTouchOneByOne::create();

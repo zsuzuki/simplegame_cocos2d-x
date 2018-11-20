@@ -6,6 +6,7 @@
 //
 
 #include "TitleMode.hpp"
+#include "Status.hpp"
 
 namespace Game
 {

@@ -1,0 +1,12 @@
+#
+# game sequence struct
+#
+namespace = "Game"
+struct_name = "Status"
+
+lua = true
+
+[[member]]
+name = "score"
+type = "uint32_t"
+initial = 0

@@ -61,3 +61,10 @@ GameUpdate(float dt)
 {
   Game::Manager::update(dt);
 }
+
+//
+Game::Context&
+GetGameContext()
+{
+    return Game::Manager::getContext();
+}
