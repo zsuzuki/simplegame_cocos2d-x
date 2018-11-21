@@ -20,23 +20,25 @@ namespace
 void
 switch_scene(Game::SequenceMode mode, bool jump)
 {
-  cocos2d::Scene* scene = nullptr;
-  switch (mode)
-  {
-  case Game::SequenceMode::Title:
-    scene = HelloWorld::createScene();
-    break;
-  case Game::SequenceMode::InGame:
-    scene = InGameScene::createScene();
-    break;
-  default:
-    break;
-  }
-  if (scene)
-  {
-    Director::getInstance()->replaceScene(scene);
-    Game::Manager::requestSequence(mode, jump);
-  }
+  Game::Manager::requestSequence(mode, jump, [mode]() {
+    cocos2d::Scene* scene = nullptr;
+    switch (mode)
+    {
+    case Game::SequenceMode::Title:
+      scene = HelloWorld::createScene();
+      break;
+    case Game::SequenceMode::InGame:
+      scene = InGameScene::createScene();
+      break;
+    default:
+      break;
+    }
+    if (scene)
+    {
+      auto* fade = TransitionFade::create(0.5f, scene, {255, 255, 255});
+      Director::getInstance()->replaceScene(fade);
+    }
+  });
 }
 } // namespace
 
@@ -51,7 +53,7 @@ SwitchMode(Game::SequenceMode mode)
 void
 ReturnMode()
 {
-  auto mode = Game::Manager::getReturnSequence();
+  auto mode = Game::Manager::popSequence();
   switch_scene(mode, true);
 }
 
@@ -66,5 +68,5 @@ GameUpdate(float dt)
 Game::Context&
 GetGameContext()
 {
-    return Game::Manager::getContext();
+  return Game::Manager::getContext();
 }

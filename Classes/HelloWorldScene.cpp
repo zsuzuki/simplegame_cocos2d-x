@@ -103,20 +103,6 @@ HelloWorld::init()
     this->addChild(sprite, 0);
   }
 
-  {
-    auto& ctx  = GetGameContext();
-    auto  stat = ctx.get<Game::Status>("stat");
-    if (stat)
-    {
-      char buff[128];
-      snprintf(buff, sizeof(buff), "Score: %d", stat->getScore());
-      auto l = Label::createWithTTF(buff, "fonts/Marker Felt.ttf", 24);
-      auto h = visibleSize.height;
-      l->setPosition({origin.x + visibleSize.width / 2, origin.y + (h - h / 3)});
-      this->addChild(l);
-    }
-  }
-
   auto listener = EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
 
@@ -140,14 +126,43 @@ HelloWorld::update(float dt)
 void
 HelloWorld::onEnter()
 {
+  auto  visibleSize = Director::getInstance()->getVisibleSize();
+  Vec2  origin      = Director::getInstance()->getVisibleOrigin();
+  auto& ctx         = GetGameContext();
+  auto  stat        = ctx.get<Game::Status>("stat");
+  if (stat)
+  {
+    printf("Context get\n");
+    char buff[128];
+    snprintf(buff, sizeof(buff), "Score: %d", stat->getScore());
+    auto l = Label::createWithTTF(buff, "fonts/Marker Felt.ttf", 24);
+    auto h = visibleSize.height;
+    l->setPosition({origin.x + visibleSize.width / 2, origin.y + (h - h / 3)});
+    this->addChild(l);
+  }
+
+  printf("onEnter Title\n");
   Scene::onEnter();
-  scheduleUpdate();
 }
 void
 HelloWorld::onExit()
 {
+  printf("onExit Title\n");
   Scene::onExit();
   unscheduleUpdate();
+}
+
+void
+HelloWorld::onEnterTransitionDidFinish()
+{
+  printf("onEnterDidFinish Title\n");
+  scheduleUpdate();
+}
+
+void
+HelloWorld::onExitTransitionDidStart()
+{
+  printf("onExitDidStart Title\n");
 }
 
 //

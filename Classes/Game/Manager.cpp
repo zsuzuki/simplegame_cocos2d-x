@@ -15,19 +15,22 @@
 
 namespace Game
 {
+using namespace Manager;
+
 namespace
 {
 //
 struct Implement
 {
   using SequenceStack = std::vector<SequenceMode>;
-  sol::state    lua;
-  Context       context;
-  SequenceStack sequence;
-  SequenceMode  request = SequenceMode::None;
-  ModePtr       mode;
-  bool          jump_sequence = false;
-  bool          enable_update = false;
+  sol::state     lua;
+  Context        context;
+  SequenceStack  sequence;
+  SequenceMode   request = SequenceMode::None;
+  ModePtr        mode;
+  ModeChangeFunc mode_change_func;
+  bool           jump_sequence = false;
+  bool           enable_update = false;
 
   Implement() { sequence.reserve(20); }
 
@@ -69,6 +72,8 @@ struct Implement
 
       if (need_initialize)
       {
+        if (mode_change_func)
+          mode_change_func();
         // 終了チェック -> 次のモードの初期化
         mode = getModePtr(request);
         if (mode)
@@ -114,18 +119,21 @@ Manager::setup(SequenceMode sm)
 
 // 次のモードをリクエスト
 void
-Manager::requestSequence(SequenceMode ss, bool jump)
+Manager::requestSequence(SequenceMode ss, bool jump, ModeChangeFunc f)
 {
-  impl->request       = ss;
-  impl->jump_sequence = jump;
+  impl->request          = ss;
+  impl->jump_sequence    = jump;
+  impl->mode_change_func = f;
 }
 
 // 一つ前のモードに戻る
 SequenceMode
-Manager::getReturnSequence()
+Manager::popSequence()
 {
   impl->sequence.resize(impl->sequence.size() - 1);
-  return impl->getSequence();
+  auto mode = impl->getSequence();
+  impl->setSequence(SequenceMode::None, true);
+  return mode;
 }
 
 //

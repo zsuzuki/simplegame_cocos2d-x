@@ -36,6 +36,8 @@ public:
   void update(float dt) override;
   void onEnter() override;
   void onExit() override;
+  void onEnterTransitionDidFinish() override;
+  void onExitTransitionDidStart() override;
 
   // a selector callback
   void menuCloseCallback(cocos2d::Ref* pSender);

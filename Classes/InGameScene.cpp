@@ -55,12 +55,26 @@ InGameScene::update(float dt)
 void
 InGameScene::onEnter()
 {
+  printf("onEnter InGame\n");
   Scene::onEnter();
-  scheduleUpdate();
 }
 void
 InGameScene::onExit()
 {
+  printf("onExit InGame\n");
   Scene::onExit();
   unscheduleUpdate();
+}
+
+void
+InGameScene::onEnterTransitionDidFinish()
+{
+  printf("onEnterDidFinish InGame\n");
+  scheduleUpdate();
+}
+
+void
+InGameScene::onExitTransitionDidStart()
+{
+  printf("onExitDidStart InGame\n");
 }

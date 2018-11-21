@@ -19,6 +19,8 @@ public:
   void update(float dt) override;
   void onEnter() override;
   void onExit() override;
+  void onEnterTransitionDidFinish() override;
+  void onExitTransitionDidStart() override;
 
   CREATE_FUNC(InGameScene);
 };

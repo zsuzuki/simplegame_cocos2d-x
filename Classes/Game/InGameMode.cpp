@@ -39,6 +39,7 @@ InGameMode::finalize()
     stat = ctx.create<Status>("stat");
   }
   stat->setScore(score);
+  printf("Context set\n");
 }
 
 bool

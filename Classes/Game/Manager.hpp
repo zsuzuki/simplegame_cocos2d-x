@@ -9,6 +9,7 @@
 #define Manager_hpp
 
 #include <cstdint>
+#include <functional>
 
 namespace Game
 {
@@ -25,8 +26,9 @@ void update(float dt);
 
 Context& getContext();
 
-void         requestSequence(SequenceMode ss, bool jump = false);
-SequenceMode getReturnSequence();
+using ModeChangeFunc = std::function<void()>;
+void         requestSequence(SequenceMode ss, bool jump, ModeChangeFunc f);
+SequenceMode popSequence();
 } // namespace Manager
 
 } // namespace Game
