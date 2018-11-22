@@ -73,7 +73,7 @@ struct Implement
       if (need_initialize)
       {
         if (mode_change_func)
-          mode_change_func();
+          mode_change_func(request);
         // 終了チェック -> 次のモードの初期化
         mode = getModePtr(request);
         if (mode)

@@ -6,6 +6,9 @@
 //
 
 #include "InGameScene.hpp"
+#include "Game/Player.hpp"
+#include "Game/Status.hpp"
+#include "Game/context.hpp"
 #include "GameSupport.hpp"
 #include "SimpleAudioEngine.h"
 
@@ -16,6 +19,18 @@ InGameScene::createScene()
 {
   return InGameScene::create();
 }
+
+namespace
+{
+//
+Vec2
+calc_center(Vec2 p, Vec2 f, Size vs, Vec2 o)
+{
+  auto vh = vs / 2.0f;
+  return {p.x / f.x + o.x + vh.width, p.y / f.y + o.x + vh.height};
+}
+
+} // namespace
 
 bool
 InGameScene::init()
@@ -55,8 +70,24 @@ InGameScene::update(float dt)
 void
 InGameScene::onEnter()
 {
-  printf("onEnter InGame\n");
   Scene::onEnter();
+
+  auto vs   = Director::getInstance()->getVisibleSize();
+  Vec2 orgs = Director::getInstance()->getVisibleOrigin();
+
+  auto& ctx    = GetGameContext();
+  auto  status = ctx.get<Game::Status>("stat");
+  auto  player = ctx.get<Game::Player>("player");
+
+  Vec2 p_pos{player->getX(), player->getY()};
+  Vec2 f_sz{status->getFieldWidth(), status->getFieldHeight()};
+  Vec2 spos = calc_center(p_pos, f_sz, vs, orgs);
+
+  auto sprite = Sprite::create("circle.png");
+  sprite->setPosition(spos);
+  this->addChild(sprite, 0);
+
+  printf("onEnter InGame\n");
 }
 void
 InGameScene::onExit()

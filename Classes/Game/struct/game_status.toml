@@ -3,10 +3,19 @@
 #
 namespace = "Game"
 struct_name = "Status"
+include = ["cstdint"]
 
-lua = true
+# lua = true
 
 [[member]]
 name = "score"
 type = "uint32_t"
 initial = 0
+[[member]]
+name = "field_width"
+type = "float"
+initial = 1024.0
+[[member]]
+name = "field_height"
+type = "float"
+initial = 1024.0

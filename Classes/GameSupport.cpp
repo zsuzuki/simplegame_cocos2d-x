@@ -20,9 +20,9 @@ namespace
 void
 switch_scene(Game::SequenceMode mode, bool jump)
 {
-  Game::Manager::requestSequence(mode, jump, [mode]() {
+  Game::Manager::requestSequence(mode, jump, [](Game::SequenceMode m) {
     cocos2d::Scene* scene = nullptr;
-    switch (mode)
+    switch (m)
     {
     case Game::SequenceMode::Title:
       scene = HelloWorld::createScene();
@@ -35,7 +35,7 @@ switch_scene(Game::SequenceMode mode, bool jump)
     }
     if (scene)
     {
-      auto* fade = TransitionFade::create(0.5f, scene, {255, 255, 255});
+      auto* fade = TransitionFade::create(0.5f, scene, {0, 0, 0});
       Director::getInstance()->replaceScene(fade);
     }
   });

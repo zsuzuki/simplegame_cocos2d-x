@@ -1,0 +1,23 @@
+#
+namespace = "Game"
+struct_name = "Player"
+include = ["string"]
+
+# lua = true
+
+[[member]]
+name = "name"
+type = "std::string"
+[[member]]
+name = "hp"
+type = "bit-unsigned"
+bits = 10
+initial = 0
+[[member]]
+name = "x"
+type = "float"
+initial = 0
+[[member]]
+name = "y"
+type = "float"
+initial = 0

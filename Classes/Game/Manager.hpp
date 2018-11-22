@@ -26,7 +26,7 @@ void update(float dt);
 
 Context& getContext();
 
-using ModeChangeFunc = std::function<void()>;
+using ModeChangeFunc = std::function<void(SequenceMode)>;
 void         requestSequence(SequenceMode ss, bool jump, ModeChangeFunc f);
 SequenceMode popSequence();
 } // namespace Manager
