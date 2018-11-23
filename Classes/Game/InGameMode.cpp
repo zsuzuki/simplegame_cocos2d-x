@@ -27,10 +27,10 @@ InGameMode::initialize()
 {
   auto& ctx = Manager::getContext();
 
-  auto stat = ctx.get<Status>("stat");
+  auto stat = ctx.get<Status>("status");
   if (!stat)
   {
-    stat = ctx.create<Status>("stat");
+    stat = ctx.create<Status>("status");
   }
 
   auto player = ctx.get<Player>("player");
@@ -51,9 +51,8 @@ void
 InGameMode::finalize()
 {
   auto& ctx  = Manager::getContext();
-  auto  stat = ctx.get<Status>("stat");
+  auto  stat = ctx.get<Status>("status");
   stat->setScore(score);
-  printf("Context set\n");
 }
 
 bool

@@ -76,7 +76,7 @@ InGameScene::onEnter()
   Vec2 orgs = Director::getInstance()->getVisibleOrigin();
 
   auto& ctx    = GetGameContext();
-  auto  status = ctx.get<Game::Status>("stat");
+  auto  status = ctx.get<Game::Status>("status");
   auto  player = ctx.get<Game::Player>("player");
 
   Vec2 p_pos{player->getX(), player->getY()};
@@ -86,13 +86,10 @@ InGameScene::onEnter()
   auto sprite = Sprite::create("circle.png");
   sprite->setPosition(spos);
   this->addChild(sprite, 0);
-
-  printf("onEnter InGame\n");
 }
 void
 InGameScene::onExit()
 {
-  printf("onExit InGame\n");
   Scene::onExit();
   unscheduleUpdate();
 }
@@ -100,12 +97,10 @@ InGameScene::onExit()
 void
 InGameScene::onEnterTransitionDidFinish()
 {
-  printf("onEnterDidFinish InGame\n");
   scheduleUpdate();
 }
 
 void
 InGameScene::onExitTransitionDidStart()
 {
-  printf("onExitDidStart InGame\n");
 }
