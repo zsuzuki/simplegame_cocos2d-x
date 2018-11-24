@@ -1,21 +1,17 @@
 //
-//  InGameScene.hpp
+//  StartUpScene.hpp
 //  simplegame
 //
-//  Created by 鈴木良則 on 2018/11/19.
+//  Created by 鈴木良則 on 2018/11/25.
 //
 
-#ifndef InGameScene_hpp
-#define InGameScene_hpp
+#ifndef StartUpScene_hpp
+#define StartUpScene_hpp
 
 #include "cocos2d.h"
 
-class InGameScene : public cocos2d::Scene
+class StartUpScene : public cocos2d::Scene
 {
-  cocos2d::Sprite* sprite;
-
-  void updateDisp();
-
 public:
   static cocos2d::Scene* createScene();
 
@@ -26,7 +22,7 @@ public:
   void onEnterTransitionDidFinish() override;
   void onExitTransitionDidStart() override;
 
-  CREATE_FUNC(InGameScene);
+  CREATE_FUNC(StartUpScene);
 };
 
-#endif /* InGameScene_hpp */
+#endif /* StartUpScene_hpp */

@@ -7,6 +7,7 @@
 
 #include "TitleMode.hpp"
 #include "../status/Status.hpp"
+#include <cstdio>
 
 namespace Game
 {
@@ -15,6 +16,7 @@ TitleMode::~TitleMode() {}
 void
 TitleMode::initialize()
 {
+  printf("in title mode\n");
 }
 bool
 TitleMode::completeInitialize()
@@ -24,6 +26,7 @@ TitleMode::completeInitialize()
 void
 TitleMode::finalize()
 {
+  printf("out title mode\n");
 }
 bool
 TitleMode::completeFinalize()

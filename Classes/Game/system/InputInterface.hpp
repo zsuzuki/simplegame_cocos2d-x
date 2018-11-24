@@ -21,9 +21,14 @@ class InputInterface
 public:
   struct Touch
   {
-    float x, y;
-    float mx, my;
-    float dt;
+    float x     = 0.0f;
+    float y     = 0.0f;
+    float bx    = 0.0f;
+    float by    = 0.0f;
+    float mx    = 0.0f;
+    float my    = 0.0f;
+    float delta = 0.0f;
+    bool  on    = false;
   };
 
   InputInterface()          = default;
@@ -60,7 +65,7 @@ public:
   virtual void postUpdate()        = 0;
 
   virtual size_t          getNbInput()     = 0;
-  virtual InputInterface& getInput(int ch) = 0;
+  virtual InputInterface* getInput(int ch) = 0;
 };
 } // namespace Game
 

@@ -24,7 +24,7 @@
 
 #include "AppDelegate.h"
 #include "GameSupport.hpp"
-#include "HelloWorldScene.h"
+#include "StartUpScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -128,7 +128,7 @@ AppDelegate::applicationDidFinishLaunching()
 
   GameSetup();
 
-  auto scene = HelloWorld::createScene();
+  auto scene = StartUpScene::createScene();
 
   director->runWithScene(scene);
 

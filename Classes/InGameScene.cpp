@@ -6,9 +6,9 @@
 //
 
 #include "InGameScene.hpp"
+#include "Game/context.hpp"
 #include "Game/status/Player.hpp"
 #include "Game/status/Status.hpp"
-#include "Game/context.hpp"
 #include "GameSupport.hpp"
 #include "InputImplement.hpp"
 #include "SimpleAudioEngine.h"
@@ -27,8 +27,7 @@ namespace
 Vec2
 calc_center(Vec2 p, Vec2 f, Size vs, Vec2 o)
 {
-  auto vh = vs / 2.0f;
-  return {p.x / f.x + o.x + vh.width, p.y / f.y + o.y + vh.height};
+  return {p.x / f.x * vs.width + o.x, p.y / f.y * vs.height + o.y};
 }
 
 } // namespace
@@ -52,19 +51,18 @@ InGameScene::init()
   listener->setSwallowTouches(true);
 
   auto  ii = GetGameInput();
-  auto& i1 = ii->getInput(0);
+  auto* i1 = ii->getInput(0);
 
-  listener->onTouchBegan = [&](Touch* touch, Event* event) {
-    i1.beginTouch(*touch);
+  listener->onTouchBegan = [=](Touch* touch, Event* event) {
+    i1->beginTouch(*touch);
     return true;
   };
-  listener->onTouchMoved = [&](Touch* touch, Event* event) {
-    i1.moveTouch(*touch);
+  listener->onTouchMoved = [=](Touch* touch, Event* event) {
+    i1->moveTouch(*touch);
     return true;
   };
-  listener->onTouchEnded = [&](Touch* touch, Event* event) {
-    i1.endTouch(*touch);
-    ReturnMode();
+  listener->onTouchEnded = [=](Touch* touch, Event* event) {
+    i1->endTouch(*touch);
     return true;
   };
 
@@ -76,16 +74,8 @@ InGameScene::init()
 
 //
 void
-InGameScene::update(float dt)
+InGameScene::updateDisp()
 {
-  GameUpdate(dt);
-}
-
-void
-InGameScene::onEnter()
-{
-  Scene::onEnter();
-
   auto vs   = Director::getInstance()->getVisibleSize();
   Vec2 orgs = Director::getInstance()->getVisibleOrigin();
 
@@ -97,9 +87,26 @@ InGameScene::onEnter()
   Vec2 f_sz{status->getFieldWidth(), status->getFieldHeight()};
   Vec2 spos = calc_center(p_pos, f_sz, vs, orgs);
 
-  auto sprite = Sprite::create("circle.png");
   sprite->setPosition(spos);
+}
+
+//
+void
+InGameScene::update(float dt)
+{
+  GameUpdate(dt);
+  updateDisp();
+}
+
+void
+InGameScene::onEnter()
+{
+  Scene::onEnter();
+
+  sprite = Sprite::create("circle.png");
   this->addChild(sprite, 0);
+
+  updateDisp();
 }
 void
 InGameScene::onExit()

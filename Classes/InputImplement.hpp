@@ -10,15 +10,27 @@
 
 #include "Game/system/InputInterface.hpp"
 #include "cocos2d.h"
+#include <chrono>
 #include <vector>
 
 class GameInput : public Game::InputInterface
 {
-  std::vector<bool>  prev_switch_list;
-  std::vector<bool>  switch_list;
-  std::vector<float> analog_list;
-  std::vector<Touch> touch_list;
-  bool               valid;
+  struct InTouch : public Game::InputInterface::Touch
+  {
+    using time = std::chrono::steady_clock::time_point;
+    time start{};
+    time now{};
+    bool still          = false;
+    int  target_switch  = -1;
+    int  target_analog0 = -1;
+    int  target_analog1 = -1;
+  };
+
+  std::vector<bool>    prev_switch_list;
+  std::vector<bool>    switch_list;
+  std::vector<float>   analog_list;
+  std::vector<InTouch> touch_list;
+  bool                 valid;
 
 public:
   GameInput();
@@ -45,6 +57,8 @@ public:
   void beginTouch(cocos2d::Touch& t);
   void moveTouch(cocos2d::Touch& t);
   void endTouch(cocos2d::Touch& t);
+
+  void clear();
 };
 
 //
@@ -63,7 +77,9 @@ public:
   void postUpdate() override;
 
   size_t     getNbInput() override;
-  GameInput& getInput(int ch) override;
+  GameInput* getInput(int ch) override;
+
+  void changeScene();
 };
 
 #endif /* InputImplement_hpp */

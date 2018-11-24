@@ -46,6 +46,8 @@ switch_scene(Game::SequenceMode m)
   }
   if (scene)
   {
+    auto input_manager = std::dynamic_pointer_cast<GameInputManager>(Game::Manager::getInputManager());
+    input_manager->changeScene();
     auto* fade = TransitionFade::create(0.5f, scene, {0, 0, 0});
     Director::getInstance()->replaceScene(fade);
   }
