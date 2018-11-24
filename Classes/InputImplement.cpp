@@ -113,13 +113,21 @@ GameInputManager::preUpdate(float dt)
   if (input.size() == 0)
   {
     input.resize(1);
-    auto& inp = input[0];
-    inp.setValid(true);
   }
 
   for (auto& i : input)
-    i.preUpdate(dt);
+  {
+    if (i.isValid())
+    {
+      i.preUpdate(dt);
+    }
+    else if (active_func)
+    {
+      i.setValid(active_func(0));
+    }
+  }
 }
+
 void
 GameInputManager::postUpdate()
 {

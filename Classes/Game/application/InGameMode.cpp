@@ -6,10 +6,10 @@
 //
 
 #include "InGameMode.hpp"
-#include "Manager.hpp"
-#include "Player.hpp"
-#include "Status.hpp"
-#include "context.hpp"
+#include "../system/Manager.hpp"
+#include "../status/Player.hpp"
+#include "../status/Status.hpp"
+#include "../context.hpp"
 
 namespace Game
 {

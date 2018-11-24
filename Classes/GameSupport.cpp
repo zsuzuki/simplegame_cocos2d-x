@@ -6,8 +6,8 @@
 //
 
 #include "GameSupport.hpp"
-#include "Game/Manager.hpp"
 #include "Game/context.hpp"
+#include "Game/system/Manager.hpp"
 #include "HelloWorldScene.h"
 #include "InGameScene.hpp"
 #include "InputImplement.hpp"
@@ -18,31 +18,39 @@ USING_NS_CC;
 
 namespace
 {
+// 現在が違うシーンであれば、新しいシーンを生成
+template <class T, class S>
+cocos2d::Scene*
+make_scene(S* current)
+{
+  if (dynamic_cast<T*>(current) == nullptr)
+    return T::createScene();
+  return nullptr;
+};
 // モードに対応するシーンの切り替え
 void
-switch_scene(Game::SequenceMode mode, bool jump)
+switch_scene(Game::SequenceMode m)
 {
-  Game::Manager::requestSequence(mode, jump, [](Game::SequenceMode m) {
-    cocos2d::Scene* scene = nullptr;
-    switch (m)
-    {
-    case Game::SequenceMode::Title:
-      scene = HelloWorld::createScene();
-      break;
-    case Game::SequenceMode::InGame:
-      scene = InGameScene::createScene();
-      break;
-    default:
-      break;
-    }
-    if (scene)
-    {
-      auto* fade = TransitionFade::create(0.5f, scene, {0, 0, 0});
-      Director::getInstance()->replaceScene(fade);
-    }
-  });
+  cocos2d::Scene* scene   = nullptr;
+  auto*           current = Director::getInstance()->getRunningScene();
+  switch (m)
+  {
+  case Game::SequenceMode::Title:
+    scene = make_scene<HelloWorld>(current);
+    break;
+  case Game::SequenceMode::InGame:
+    scene = make_scene<InGameScene>(current);
+    break;
+  default:
+    break;
+  }
+  if (scene)
+  {
+    auto* fade = TransitionFade::create(0.5f, scene, {0, 0, 0});
+    Director::getInstance()->replaceScene(fade);
+  }
 }
-
+// コントローラマネージャ
 GameInputManagerPtr input;
 } // namespace
 
@@ -50,7 +58,7 @@ GameInputManagerPtr input;
 void
 SwitchMode(Game::SequenceMode mode)
 {
-  switch_scene(mode, false);
+  Game::Manager::requestSequence(mode, false);
 }
 
 // 前のモードに戻る
@@ -58,16 +66,17 @@ void
 ReturnMode()
 {
   auto mode = Game::Manager::popSequence();
-  switch_scene(mode, true);
+  Game::Manager::requestSequence(mode, true);
 }
 
 //
 void
 GameSetup()
 {
-  Game::Manager::setup(Game::SequenceMode::Title);
+  Game::Manager::setup(Game::SequenceMode::Setup);
   input = std::make_shared<GameInputManager>();
   Game::Manager::setInputManager(input);
+  Game::Manager::setChangeModeFunction(switch_scene);
 }
 
 //

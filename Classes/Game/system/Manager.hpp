@@ -23,14 +23,19 @@ class InputManager;
 //
 namespace Manager
 {
+
 void setup(SequenceMode sm);
-void setInputManager(std::shared_ptr<InputManager> im);
 void update(float dt);
+
+using InputManagerPtr = std::shared_ptr<InputManager>;
+void            setInputManager(InputManagerPtr im);
+InputManagerPtr getInputManager();
 
 Context& getContext();
 
 using ModeChangeFunc = std::function<void(SequenceMode)>;
-void         requestSequence(SequenceMode ss, bool jump, ModeChangeFunc f);
+void         requestSequence(SequenceMode ss, bool jump);
+void         setChangeModeFunction(ModeChangeFunc f);
 SequenceMode popSequence();
 } // namespace Manager
 

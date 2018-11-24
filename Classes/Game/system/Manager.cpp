@@ -6,10 +6,10 @@
 //
 
 #include "Manager.hpp"
+#include "../SequenceList.hpp"
+#include "../context.hpp"
+#include "../mode.h"
 #include "InputInterface.hpp"
-#include "SequenceList.hpp"
-#include "context.hpp"
-#include "mode.h"
 #include <memory>
 #include <sol.hpp>
 #include <vector>
@@ -108,17 +108,19 @@ std::unique_ptr<Implement> impl;
 //
 // interface
 //
+namespace Manager
+{
 
 //
 Context&
-Manager::getContext()
+getContext()
 {
   return impl->context;
 }
 
 // 初期化
 void
-Manager::setup(SequenceMode sm)
+setup(SequenceMode sm)
 {
   impl = std::move(std::make_unique<Implement>());
   impl->lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::math,
@@ -128,23 +130,34 @@ Manager::setup(SequenceMode sm)
 
 // 入力マネージャ設定
 void
-Manager::setInputManager(std::shared_ptr<InputManager> im)
+setInputManager(std::shared_ptr<InputManager> im)
 {
   impl->input_manager = im;
 }
 
+InputManagerPtr
+getInputManager()
+{
+  return impl->input_manager;
+}
+
 // 次のモードをリクエスト
 void
-Manager::requestSequence(SequenceMode ss, bool jump, ModeChangeFunc f)
+requestSequence(SequenceMode ss, bool jump)
 {
-  impl->request          = ss;
-  impl->jump_sequence    = jump;
+  impl->request       = ss;
+  impl->jump_sequence = jump;
+}
+
+void
+setChangeModeFunction(ModeChangeFunc f)
+{
   impl->mode_change_func = f;
 }
 
 // 一つ前のモードに戻る
 SequenceMode
-Manager::popSequence()
+popSequence()
 {
   impl->sequence.resize(impl->sequence.size() - 1);
   auto mode = impl->getSequence();
@@ -154,8 +167,10 @@ Manager::popSequence()
 
 //
 void
-Manager::update(float dt)
+update(float dt)
 {
   impl->updateMode(dt);
 }
+} // namespace Manager
+
 } // namespace Game

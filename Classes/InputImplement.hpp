@@ -8,7 +8,7 @@
 #ifndef InputImplement_hpp
 #define InputImplement_hpp
 
-#include "Game/InputInterface.hpp"
+#include "Game/system/InputInterface.hpp"
 #include "cocos2d.h"
 #include <vector>
 
@@ -51,10 +51,13 @@ public:
 class GameInputManager : public Game::InputManager
 {
   std::vector<GameInput> input;
+  ActivateFunction       active_func;
 
 public:
   GameInputManager() { input.reserve(4); }
   ~GameInputManager() = default;
+
+  void setActivateFunction(ActivateFunction af) override { active_func = af; }
 
   void preUpdate(float dt) override;
   void postUpdate() override;

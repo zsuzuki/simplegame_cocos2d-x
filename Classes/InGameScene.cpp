@@ -6,8 +6,8 @@
 //
 
 #include "InGameScene.hpp"
-#include "Game/Player.hpp"
-#include "Game/Status.hpp"
+#include "Game/status/Player.hpp"
+#include "Game/status/Status.hpp"
 #include "Game/context.hpp"
 #include "GameSupport.hpp"
 #include "InputImplement.hpp"
@@ -28,7 +28,7 @@ Vec2
 calc_center(Vec2 p, Vec2 f, Size vs, Vec2 o)
 {
   auto vh = vs / 2.0f;
-  return {p.x / f.x + o.x + vh.width, p.y / f.y + o.x + vh.height};
+  return {p.x / f.x + o.x + vh.width, p.y / f.y + o.y + vh.height};
 }
 
 } // namespace

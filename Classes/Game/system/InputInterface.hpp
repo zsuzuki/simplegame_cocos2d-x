@@ -9,6 +9,7 @@
 #define InputInterface_hpp
 
 #include <cstdint>
+#include <functional>
 #include <utility>
 
 namespace Game
@@ -45,8 +46,15 @@ public:
 class InputManager
 {
 public:
+  // デバイス接続時のコールバック
+  // arg<int>: デバイスID(アプリケーションで決める=ハードウェアの何らかのIDを直接表す物ではない)
+  // return: true=そのデバイスは有効化される
+  using ActivateFunction = std::function<bool(int)>;
+
   InputManager()          = default;
   virtual ~InputManager() = default;
+
+  virtual void setActivateFunction(ActivateFunction af) = 0;
 
   virtual void preUpdate(float dt) = 0;
   virtual void postUpdate()        = 0;

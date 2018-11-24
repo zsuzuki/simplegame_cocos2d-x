@@ -8,7 +8,7 @@
 #ifndef InGameMode_hpp
 #define InGameMode_hpp
 
-#include "mode.h"
+#include "../mode.h"
 #include <cstdint>
 
 namespace Game

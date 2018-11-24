@@ -16,6 +16,7 @@ namespace Game
 enum class SequenceMode : uint8_t
 {
   None,
+  Setup,
   Title,
   InGame,
 };

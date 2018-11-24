@@ -1,23 +1,24 @@
 //
-//  TitleMode.hpp
+//  Main.hpp
 //  simplegame
 //
-//  Created by 鈴木良則 on 2018/11/19.
+//  Created by 鈴木良則 on 2018/11/25.
 //
 
-#ifndef TitleMode_hpp
-#define TitleMode_hpp
+#ifndef Main_hpp
+#define Main_hpp
 
-#include "mode.h"
+#include "../mode.h"
 #include <cstdint>
 
 namespace Game
 {
-class TitleMode : public Mode
+// アプリケーションのセットアップモード
+class SetupMode : public Mode
 {
 public:
-  TitleMode();
-  ~TitleMode() override;
+  SetupMode();
+  ~SetupMode() override;
   void initialize() override;
   bool completeInitialize() override;
   void finalize() override;
@@ -26,4 +27,4 @@ public:
 };
 } // namespace Game
 
-#endif /* TitleMode_hpp */
+#endif /* Main_hpp */

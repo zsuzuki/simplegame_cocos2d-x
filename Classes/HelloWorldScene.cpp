@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
-#include "Game/Status.hpp"
+#include "Game/status/Status.hpp"
 #include "Game/context.hpp"
 #include "GameSupport.hpp"
 #include "SimpleAudioEngine.h"
