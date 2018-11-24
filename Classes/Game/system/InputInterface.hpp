@@ -49,7 +49,7 @@ public:
   // デバイス接続時のコールバック
   // arg<int>: デバイスID(アプリケーションで決める=ハードウェアの何らかのIDを直接表す物ではない)
   // return: true=そのデバイスは有効化される
-  using ActivateFunction = std::function<bool(int)>;
+  using ActivateFunction = std::function<bool(int, InputInterface&)>;
 
   InputManager()          = default;
   virtual ~InputManager() = default;

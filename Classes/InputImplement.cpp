@@ -123,7 +123,7 @@ GameInputManager::preUpdate(float dt)
     }
     else if (active_func)
     {
-      i.setValid(active_func(0));
+      i.setValid(active_func(0, i));
     }
   }
 }

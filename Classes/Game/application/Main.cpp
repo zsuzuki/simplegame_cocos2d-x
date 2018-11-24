@@ -16,10 +16,15 @@ namespace
 {
 // コントローラのアクティベーション
 bool
-activate_controller(int dev_id)
+activate_controller(int dev_id, InputInterface& input)
 {
   if (dev_id < 0)
     return false;
+  // とりあえず適当
+  if (dev_id == 0)
+    input.requestNeedChannel(2, 2);
+  else
+    input.requestNeedChannel(4, 4);
   printf("activate controller\n");
   return true;
 }
