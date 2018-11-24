@@ -10,11 +10,13 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 namespace Game
 {
 enum class SequenceMode : uint8_t;
 class Context;
+class InputManager;
 
 //
 // Game control class
@@ -22,6 +24,7 @@ class Context;
 namespace Manager
 {
 void setup(SequenceMode sm);
+void setInputManager(std::shared_ptr<InputManager> im);
 void update(float dt);
 
 Context& getContext();

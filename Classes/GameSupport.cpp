@@ -7,8 +7,10 @@
 
 #include "GameSupport.hpp"
 #include "Game/Manager.hpp"
+#include "Game/context.hpp"
 #include "HelloWorldScene.h"
 #include "InGameScene.hpp"
+#include "InputImplement.hpp"
 #include "cocos2d.h"
 #include <map>
 
@@ -40,6 +42,8 @@ switch_scene(Game::SequenceMode mode, bool jump)
     }
   });
 }
+
+GameInputManagerPtr input;
 } // namespace
 
 // 指定モードに移行して、対応するUIに切り替える
@@ -59,6 +63,15 @@ ReturnMode()
 
 //
 void
+GameSetup()
+{
+  Game::Manager::setup(Game::SequenceMode::Title);
+  input = std::make_shared<GameInputManager>();
+  Game::Manager::setInputManager(input);
+}
+
+//
+void
 GameUpdate(float dt)
 {
   Game::Manager::update(dt);
@@ -69,4 +82,11 @@ Game::Context&
 GetGameContext()
 {
   return Game::Manager::getContext();
+}
+
+//
+GameInputManagerPtr
+GetGameInput()
+{
+  return input;
 }

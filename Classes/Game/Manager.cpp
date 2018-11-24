@@ -6,6 +6,7 @@
 //
 
 #include "Manager.hpp"
+#include "InputInterface.hpp"
 #include "SequenceList.hpp"
 #include "context.hpp"
 #include "mode.h"
@@ -22,15 +23,17 @@ namespace
 //
 struct Implement
 {
-  using SequenceStack = std::vector<SequenceMode>;
-  sol::state     lua;
-  Context        context;
-  SequenceStack  sequence;
-  SequenceMode   request = SequenceMode::None;
-  ModePtr        mode;
-  ModeChangeFunc mode_change_func;
-  bool           jump_sequence = false;
-  bool           enable_update = false;
+  using SequenceStack   = std::vector<SequenceMode>;
+  using InputManagerPtr = std::shared_ptr<InputManager>;
+  sol::state      lua;
+  Context         context;
+  SequenceStack   sequence;
+  SequenceMode    request = SequenceMode::None;
+  ModePtr         mode;
+  ModeChangeFunc  mode_change_func;
+  InputManagerPtr input_manager;
+  bool            jump_sequence = false;
+  bool            enable_update = false;
 
   Implement() { sequence.reserve(20); }
 
@@ -89,7 +92,13 @@ struct Implement
     }
 
     if (enable_update && mode)
+    {
+      if (input_manager)
+        input_manager->preUpdate(dt);
       mode->update(dt);
+      if (input_manager)
+        input_manager->postUpdate();
+    }
   }
 };
 
@@ -115,6 +124,13 @@ Manager::setup(SequenceMode sm)
   impl->lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::math,
                            sol::lib::table, sol::lib::debug, sol::lib::bit32);
   impl->request = sm;
+}
+
+// 入力マネージャ設定
+void
+Manager::setInputManager(std::shared_ptr<InputManager> im)
+{
+  impl->input_manager = im;
 }
 
 // 次のモードをリクエスト

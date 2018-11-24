@@ -10,6 +10,7 @@
 #include "Game/Status.hpp"
 #include "Game/context.hpp"
 #include "GameSupport.hpp"
+#include "InputImplement.hpp"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -50,9 +51,22 @@ InGameScene::init()
   auto listener = EventListenerTouchOneByOne::create();
   listener->setSwallowTouches(true);
 
-  listener->onTouchBegan = [](Touch* touch, Event* event) { return true; };
-  listener->onTouchMoved = [](Touch* touch, Event* event) {};
-  listener->onTouchEnded = [](Touch* touch, Event* event) { ReturnMode(); };
+  auto  ii = GetGameInput();
+  auto& i1 = ii->getInput(0);
+
+  listener->onTouchBegan = [&](Touch* touch, Event* event) {
+    i1.beginTouch(*touch);
+    return true;
+  };
+  listener->onTouchMoved = [&](Touch* touch, Event* event) {
+    i1.moveTouch(*touch);
+    return true;
+  };
+  listener->onTouchEnded = [&](Touch* touch, Event* event) {
+    i1.endTouch(*touch);
+    ReturnMode();
+    return true;
+  };
 
   auto dispatcher = Director::getInstance()->getEventDispatcher();
   dispatcher->addEventListenerWithSceneGraphPriority(listener, this);

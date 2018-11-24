@@ -10,14 +10,22 @@
 
 #include "Game/SequenceList.hpp"
 #include <cstdint>
+#include <memory>
 
-namespace Game {
-    class Context;
+namespace Game
+{
+class Context;
 }
+class GameInputManager;
+using GameInputManagerPtr = std::shared_ptr<GameInputManager>;
+
+void GameSetup();
 
 void SwitchMode(Game::SequenceMode mode);
 void ReturnMode();
 void GameUpdate(float dt);
+
+GameInputManagerPtr GetGameInput();
 Game::Context& GetGameContext();
 
 #endif /* GameSupport_hpp */

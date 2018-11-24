@@ -23,8 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "Game/Manager.hpp"
-#include "Game/SequenceList.hpp"
+#include "GameSupport.hpp"
 #include "HelloWorldScene.h"
 
 // #define USE_AUDIO_ENGINE 1
@@ -127,12 +126,10 @@ AppDelegate::applicationDidFinishLaunching()
 
   register_all_packages();
 
-  Game::Manager::setup(Game::SequenceMode::Title);
+  GameSetup();
 
-  // create a scene. it's an autorelease object
   auto scene = HelloWorld::createScene();
 
-  // run
   director->runWithScene(scene);
 
   return true;
