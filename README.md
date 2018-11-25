@@ -6,13 +6,13 @@ cocos2d-x を使った簡単なゲームコードのベース部分。
 
 ### luaの追加
 プロジェクトにluaのソースを追加する。
-lua.cとluac.c以外の全てのソースを、ディレクトリのルートに配置し、プロジェクト設定の"Search Paths"->"Header Search Paths"に
+lua.cとluac.c以外の全てのソースを、ディレクトリのルートに配置し、プロジェクト設定の`Search Paths`->`Header Search Paths`に
 `$(SRCROOT)/../lua`を追加。
 
 ### C++17
-プロジェクト設定の"Apple Clang - Language - C++" -> "C++ Language Dialect"を"C++17[-std=c++17]"、desktop側も同じように設定。
+プロジェクト設定の`Apple Clang - Language - C++` -> `C++ Language Dialect`を`C++17[-std=c++17]`、desktop側も同じように設定。
 
-### マルチタッチ
+### マルチタッチ(iOS)
 proj.ios_mac/ios/RootViewController.mmにある、
 ```obj-c
 - (void)loadView {
@@ -35,8 +35,8 @@ proj.ios_mac/ios/RootViewController.mmにある、
 ```
 
 ## 画像追加時の注意点
-Xcodeで画像を追加する差異に、アトリビュートによってりんくできないことがある。
-事前に以下のコマンでによって、属性を消してから、プロジェクトに追加する
+Xcodeで画像を追加する差異に、アトリビュートによってリンクできないことがある。
+事前に以下のコマンドによって、属性を消してから、プロジェクトに追加する
 ```shell
 $ xattr -cr [image.png]
 ```
