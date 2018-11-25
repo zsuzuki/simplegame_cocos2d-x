@@ -51,7 +51,8 @@ GameInput::preUpdate(float dt)
     }
     if (t.still)
     {
-      auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(t.now - t.start);
+      auto tnow = std::chrono::steady_clock::now();
+      auto dur  = std::chrono::duration_cast<std::chrono::milliseconds>(tnow - t.start);
       if (dur.count() > 500 && i < sw_sz)
       {
         t.target_switch = i;
@@ -152,7 +153,7 @@ GameInput::beginTouch(cocos2d::Touch& t)
   touch.my    = 0.0f;
   touch.delta = 0.0f;
   touch.start = std::chrono::steady_clock::now();
-  touch.now   = touch.start;
+  touch.last  = touch.start;
   touch.still = true;
 
   touch.target_switch  = -1;
@@ -176,13 +177,13 @@ GameInput::moveTouch(cocos2d::Touch& t)
   auto d      = t.getDelta();
   touch.mx    = d.x;
   touch.my    = d.y;
-  touch.now   = std::chrono::steady_clock::now();
+  touch.last  = std::chrono::steady_clock::now();
   if (sqrtf(d.x * d.x + d.y * d.y) > 1.0f)
     touch.still = false;
 
   //   auto mf  = t.getMaxForce();
   //   auto cf  = t.getCurrentForce();
-  //   auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(touch.now - touch.start);
+  //   auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(touch.last - touch.start);
   //   printf("move[%2d]: %lld %0.1f, %0.1f f=%0.1f(%0.1f)\n", i, dur.count(), d.x, d.y, cf, mf);
 }
 void

@@ -19,7 +19,7 @@ class GameInput : public Game::InputInterface
   {
     using time = std::chrono::steady_clock::time_point;
     time start{};
-    time now{};
+    time last{};
     bool still          = false;
     int  target_switch  = -1;
     int  target_analog0 = -1;
