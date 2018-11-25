@@ -22,9 +22,9 @@ activate_controller(int dev_id, InputInterface& input)
     return false;
   // とりあえず適当
   if (dev_id == 0)
-    input.requestNeedChannel(2, 4);
-  else
     input.requestNeedChannel(4, 4);
+  else
+    input.requestNeedChannel(8, 8);
   printf("activate controller\n");
   return true;
 }

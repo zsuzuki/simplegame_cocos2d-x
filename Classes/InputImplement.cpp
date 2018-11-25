@@ -38,27 +38,37 @@ GameInput::preUpdate(float dt)
     auto& t = touch_list[i];
     if (t.on == false)
     {
-      if (t.target_switch >= 0)
-        switch_list[t.target_switch] = false;
+      if (t.target_switch0 >= 0)
+        switch_list[t.target_switch0] = false;
+      if (t.target_switch1 >= 0)
+        switch_list[t.target_switch1] = false;
       if (t.target_analog0 >= 0)
         analog_list[t.target_analog0] = 0.0f;
       if (t.target_analog1 >= 0)
         analog_list[t.target_analog1] = 0.0f;
       continue;
     }
+    int sidx = i * 2;
+    if (t.enable_force)
+    {
+      // 3D-Touchでボタン1
+      t.target_switch1      = sidx + 1;
+      switch_list[sidx + 1] = t.force >= 1.0f;
+    }
     if (t.still)
     {
       auto tnow = std::chrono::steady_clock::now();
       auto dur  = std::chrono::duration_cast<std::chrono::milliseconds>(tnow - t.start);
-      if (dur.count() > 500 && i < sw_sz)
+      if (dur.count() > 500 && sidx < sw_sz)
       {
-        t.target_switch = i;
-        switch_list[i]  = true;
+        // 0.5秒以上静止状態でタッチしていたらボタン0と見なす
+        t.target_switch0  = sidx;
+        switch_list[sidx] = true;
       }
     }
-    else if (i < sw_sz && switch_list[i] == false)
+    else if (sidx < sw_sz && switch_list[sidx] == false)
     {
-      auto aidx = i * 2;
+      int aidx = i * 2;
       if (an_sz > aidx)
       {
         // TODO: get screen size
@@ -153,13 +163,16 @@ GameInput::beginTouch(cocos2d::Touch& t)
   touch.last  = touch.start;
   touch.still = true;
 
-  touch.target_switch  = -1;
+  touch.target_switch0 = -1;
+  touch.target_switch1 = -1;
   touch.target_analog0 = -1;
   touch.target_analog1 = -1;
 
-  //   auto mf = t.getMaxForce();
-  //   auto cf = t.getCurrentForce();
-  //   printf("begin[%2d]: %0.1f, %0.1f f=%0.1f(%0.1f)\n", i, v.x, v.y, cf, mf);
+  auto mf            = t.getMaxForce();
+  auto cf            = t.getCurrentForce();
+  bool ef            = mf > 0.0f;
+  touch.enable_force = ef;
+  touch.force        = ef ? cf / mf : 0.0f;
 }
 void
 GameInput::moveTouch(cocos2d::Touch& t)
@@ -178,10 +191,11 @@ GameInput::moveTouch(cocos2d::Touch& t)
   if (sqrtf(d.x * d.x + d.y * d.y) > 1.0f)
     touch.still = false;
 
-  auto mf  = t.getMaxForce();
-  auto cf  = t.getCurrentForce();
-  auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(touch.last - touch.start);
-  printf("move[%2d]: %lld %0.1f, %0.1f f=%0.1f(%0.1f)\n", i, dur.count(), d.x, d.y, cf, mf);
+  auto mf            = t.getMaxForce();
+  auto cf            = t.getCurrentForce();
+  bool ef            = mf > 0.0f;
+  touch.enable_force = ef;
+  touch.force        = ef ? cf / mf : 0.0f;
 }
 void
 GameInput::endTouch(cocos2d::Touch& t)

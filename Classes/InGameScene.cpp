@@ -60,7 +60,6 @@ InGameScene::init()
   listener->onTouchesMoved = [=](const std::vector<Touch*>& touch, Event* event) {
     for (auto t : touch)
       i1->moveTouch(*t);
-      printf("nb touch: %zu\n",touch.size());
     return true;
   };
   listener->onTouchesEnded = [=](const std::vector<Touch*>& touch, Event* event) {
@@ -90,8 +89,11 @@ InGameScene::updateDisp()
   Vec2 f_sz{status->getFieldWidth(), status->getFieldHeight()};
 
   auto set_pos = [&](auto& pl, auto* sp) {
-    Vec2 p_pos{pl->getX(), pl->getY()};
-    Vec2 spos = calc_center(p_pos, f_sz, vs, orgs);
+    Vec2  p_pos{pl->getX(), pl->getY()};
+    Vec2  spos = calc_center(p_pos, f_sz, vs, orgs);
+    bool  am   = pl->getAttackMode();
+    float sc   = am ? 1.5f : 1.0f;
+    sp->setScale(sc, sc);
     sp->setPosition(spos);
   };
   set_pos(player, sprite);

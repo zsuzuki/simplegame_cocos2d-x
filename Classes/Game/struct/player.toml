@@ -21,3 +21,7 @@ initial = 0
 name = "y"
 type = "float"
 initial = 0
+[[member]]
+name = "attack_mode"
+type = "bit-bool"
+initial = false

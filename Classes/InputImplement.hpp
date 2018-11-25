@@ -21,7 +21,9 @@ class GameInput : public Game::InputInterface
     time start{};
     time last{};
     bool still          = false;
-    int  target_switch  = -1;
+    bool enable_force   = false;
+    int  target_switch0 = -1;
+    int  target_switch1 = -1;
     int  target_analog0 = -1;
     int  target_analog1 = -1;
   };

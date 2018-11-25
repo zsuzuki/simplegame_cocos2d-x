@@ -86,8 +86,10 @@ InGameMode::update(float dt)
   auto  fy      = stat->getFieldHeight();
   player->setX((input0->getAnalog(0) * fx + fx) * 0.5f);
   player->setY((input0->getAnalog(1) * fy + fy) * 0.5f);
+  player->setAttackMode(input0->getSwitch(1));
   player2->setX((input0->getAnalog(2) * fx + fx) * 0.5f);
   player2->setY((input0->getAnalog(3) * fy + fy) * 0.5f);
+  player2->setAttackMode(input0->getSwitch(3));
 
   if (score > 2.0 && input0->getSwitch(0))
   {

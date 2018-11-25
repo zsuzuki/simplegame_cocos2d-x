@@ -28,6 +28,7 @@ public:
     float mx    = 0.0f;
     float my    = 0.0f;
     float delta = 0.0f;
+    float force = 0.0f;
     bool  on    = false;
   };
 
