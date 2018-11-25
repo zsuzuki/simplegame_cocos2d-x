@@ -2,3 +2,4 @@ bin/
 .vscode
 proj.*
 cocos2d/
+lua/

@@ -45,24 +45,27 @@ InGameScene::init()
 
   auto l = Label::createWithTTF("In Game", "fonts/Marker Felt.ttf", 24);
   l->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - l->getContentSize().height));
-  this->addChild(l, 1);
+  this->addChild(l, 2);
 
-  auto listener = EventListenerTouchOneByOne::create();
-  listener->setSwallowTouches(true);
+  auto listener = EventListenerTouchAllAtOnce::create();
 
   auto  ii = GetGameInput();
   auto* i1 = ii->getInput(0);
 
-  listener->onTouchBegan = [=](Touch* touch, Event* event) {
-    i1->beginTouch(*touch);
+  listener->onTouchesBegan = [=](const std::vector<Touch*>& touch, Event* event) {
+    for (auto t : touch)
+      i1->beginTouch(*t);
     return true;
   };
-  listener->onTouchMoved = [=](Touch* touch, Event* event) {
-    i1->moveTouch(*touch);
+  listener->onTouchesMoved = [=](const std::vector<Touch*>& touch, Event* event) {
+    for (auto t : touch)
+      i1->moveTouch(*t);
+      printf("nb touch: %zu\n",touch.size());
     return true;
   };
-  listener->onTouchEnded = [=](Touch* touch, Event* event) {
-    i1->endTouch(*touch);
+  listener->onTouchesEnded = [=](const std::vector<Touch*>& touch, Event* event) {
+    for (auto t : touch)
+      i1->endTouch(*t);
     return true;
   };
 
@@ -79,15 +82,20 @@ InGameScene::updateDisp()
   auto vs   = Director::getInstance()->getVisibleSize();
   Vec2 orgs = Director::getInstance()->getVisibleOrigin();
 
-  auto& ctx    = GetGameContext();
-  auto  status = ctx.get<Game::Status>("status");
-  auto  player = ctx.get<Game::Player>("player");
+  auto& ctx     = GetGameContext();
+  auto  status  = ctx.get<Game::Status>("status");
+  auto  player  = ctx.get<Game::Player>("player");
+  auto  player2 = ctx.get<Game::Player>("player2");
 
-  Vec2 p_pos{player->getX(), player->getY()};
   Vec2 f_sz{status->getFieldWidth(), status->getFieldHeight()};
-  Vec2 spos = calc_center(p_pos, f_sz, vs, orgs);
 
-  sprite->setPosition(spos);
+  auto set_pos = [&](auto& pl, auto* sp) {
+    Vec2 p_pos{pl->getX(), pl->getY()};
+    Vec2 spos = calc_center(p_pos, f_sz, vs, orgs);
+    sp->setPosition(spos);
+  };
+  set_pos(player, sprite);
+  set_pos(player2, sprite2);
 }
 
 //
@@ -104,7 +112,9 @@ InGameScene::onEnter()
   Scene::onEnter();
 
   sprite = Sprite::create("circle.png");
-  this->addChild(sprite, 0);
+  this->addChild(sprite, 1);
+  sprite2 = Sprite::create("rect_o.png");
+  this->addChild(sprite2, 0);
 
   updateDisp();
 }

@@ -13,6 +13,7 @@
 class InGameScene : public cocos2d::Scene
 {
   cocos2d::Sprite* sprite;
+  cocos2d::Sprite* sprite2;
 
   void updateDisp();
 

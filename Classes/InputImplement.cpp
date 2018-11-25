@@ -39,10 +39,7 @@ GameInput::preUpdate(float dt)
     if (t.on == false)
     {
       if (t.target_switch >= 0)
-      {
         switch_list[t.target_switch] = false;
-        printf("off switch: %d\n", t.target_switch);
-      }
       if (t.target_analog0 >= 0)
         analog_list[t.target_analog0] = 0.0f;
       if (t.target_analog1 >= 0)
@@ -57,22 +54,22 @@ GameInput::preUpdate(float dt)
       {
         t.target_switch = i;
         switch_list[i]  = true;
-        printf("on switch: %d\n", i);
       }
     }
     else if (i < sw_sz && switch_list[i] == false)
     {
-      if (an_sz > 0)
+      auto aidx = i * 2;
+      if (an_sz > aidx)
       {
         // TODO: get screen size
-        float x          = (t.x - t.bx) / 200.0f;
-        analog_list[0]   = std::max(std::min(x, 1.0f), -1.0f);
-        t.target_analog0 = 0;
-        if (an_sz > 1)
+        float x               = (t.x - t.bx) / 120.0f;
+        analog_list[aidx + 0] = std::max(std::min(x, 1.0f), -1.0f);
+        t.target_analog0      = aidx;
+        if (an_sz > aidx + 1)
         {
-          float y          = (t.y - t.by) / 200.0f;
-          analog_list[1]   = std::max(std::min(y, 1.0f), -1.0f);
-          t.target_analog1 = 1;
+          float y               = (t.y - t.by) / 120.0f;
+          analog_list[aidx + 1] = std::max(std::min(y, 1.0f), -1.0f);
+          t.target_analog1      = aidx + 1;
         }
       }
     }
@@ -181,10 +178,10 @@ GameInput::moveTouch(cocos2d::Touch& t)
   if (sqrtf(d.x * d.x + d.y * d.y) > 1.0f)
     touch.still = false;
 
-  //   auto mf  = t.getMaxForce();
-  //   auto cf  = t.getCurrentForce();
-  //   auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(touch.last - touch.start);
-  //   printf("move[%2d]: %lld %0.1f, %0.1f f=%0.1f(%0.1f)\n", i, dur.count(), d.x, d.y, cf, mf);
+  auto mf  = t.getMaxForce();
+  auto cf  = t.getCurrentForce();
+  auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(touch.last - touch.start);
+  printf("move[%2d]: %lld %0.1f, %0.1f f=%0.1f(%0.1f)\n", i, dur.count(), d.x, d.y, cf, mf);
 }
 void
 GameInput::endTouch(cocos2d::Touch& t)
