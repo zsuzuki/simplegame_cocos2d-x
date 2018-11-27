@@ -38,21 +38,25 @@ GameInput::preUpdate(float dt)
     auto& t = touch_list[i];
     if (t.on == false)
     {
-      if (t.target_switch0 >= 0)
-        switch_list[t.target_switch0] = false;
-      if (t.target_switch1 >= 0)
-        switch_list[t.target_switch1] = false;
-      if (t.target_analog0 >= 0)
-        analog_list[t.target_analog0] = 0.0f;
-      if (t.target_analog1 >= 0)
-        analog_list[t.target_analog1] = 0.0f;
+      for (auto& s : t.target_switch)
+      {
+        if (s >= 0)
+          switch_list[s] = false;
+        s = -1;
+      }
+      for (auto& a : t.target_analog)
+      {
+        if (a >= 0)
+          analog_list[a] = 0.0f;
+        a = -1;
+      }
       continue;
     }
     int sidx = i * 2;
     if (t.enable_force)
     {
       // 3D-Touchでボタン1
-      t.target_switch1      = sidx + 1;
+      t.target_switch[1]    = sidx + 1;
       switch_list[sidx + 1] = t.force >= 1.0f;
     }
     if (t.still)
@@ -62,8 +66,8 @@ GameInput::preUpdate(float dt)
       if (dur.count() > 500 && sidx < sw_sz)
       {
         // 0.5秒以上静止状態でタッチしていたらボタン0と見なす
-        t.target_switch0  = sidx;
-        switch_list[sidx] = true;
+        t.target_switch[0] = sidx;
+        switch_list[sidx]  = true;
       }
     }
     else if (sidx < sw_sz && switch_list[sidx] == false)
@@ -74,12 +78,12 @@ GameInput::preUpdate(float dt)
         // TODO: get screen size
         float x               = (t.x - t.bx) / 120.0f;
         analog_list[aidx + 0] = std::max(std::min(x, 1.0f), -1.0f);
-        t.target_analog0      = aidx;
+        t.target_analog[0]    = aidx;
         if (an_sz > aidx + 1)
         {
           float y               = (t.y - t.by) / 120.0f;
           analog_list[aidx + 1] = std::max(std::min(y, 1.0f), -1.0f);
-          t.target_analog1      = aidx + 1;
+          t.target_analog[1]    = aidx + 1;
         }
       }
     }
@@ -163,10 +167,10 @@ GameInput::beginTouch(cocos2d::Touch& t)
   touch.last  = touch.start;
   touch.still = true;
 
-  touch.target_switch0 = -1;
-  touch.target_switch1 = -1;
-  touch.target_analog0 = -1;
-  touch.target_analog1 = -1;
+  for (auto& s : touch.target_switch)
+    s = -1;
+  for (auto& a : touch.target_analog)
+    a = -1;
 
   auto mf            = t.getMaxForce();
   auto cf            = t.getCurrentForce();

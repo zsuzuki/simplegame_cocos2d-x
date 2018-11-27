@@ -150,6 +150,14 @@ requestSequence(SequenceMode ss, bool jump)
 }
 
 void
+resetSequence(SequenceMode ss)
+{
+  impl->request       = ss;
+  impl->jump_sequence = true;
+  impl->sequence.resize(0);
+}
+
+void
 setChangeModeFunction(ModeChangeFunc f)
 {
   impl->mode_change_func = f;

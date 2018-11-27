@@ -35,6 +35,7 @@ Context& getContext();
 
 using ModeChangeFunc = std::function<void(SequenceMode)>;
 void         requestSequence(SequenceMode ss, bool jump);
+void         resetSequence(SequenceMode ss);
 void         setChangeModeFunction(ModeChangeFunc f);
 SequenceMode popSequence();
 } // namespace Manager

@@ -20,12 +20,10 @@ class GameInput : public Game::InputInterface
     using time = std::chrono::steady_clock::time_point;
     time start{};
     time last{};
-    bool still          = false;
-    bool enable_force   = false;
-    int  target_switch0 = -1;
-    int  target_switch1 = -1;
-    int  target_analog0 = -1;
-    int  target_analog1 = -1;
+    bool still            = false;
+    bool enable_force     = false;
+    int  target_switch[2] = {-1, -1};
+    int  target_analog[2] = {-1, -1};
   };
 
   std::vector<bool>    prev_switch_list;
@@ -71,7 +69,7 @@ class GameInputManager : public Game::InputManager
 
 public:
   GameInputManager() { input.reserve(4); }
-  ~GameInputManager() = default;
+  ~GameInputManager() override{};
 
   void setActivateFunction(ActivateFunction af) override { active_func = af; }
 

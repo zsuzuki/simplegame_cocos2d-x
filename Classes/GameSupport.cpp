@@ -63,6 +63,13 @@ SwitchMode(Game::SequenceMode mode)
   Game::Manager::requestSequence(mode, false);
 }
 
+// 指定モードに移行して、対応するUIに切り替える(かつモード履歴もリセット)
+void
+ResetMode(Game::SequenceMode mode)
+{
+  Game::Manager::resetSequence(mode);
+}
+
 // 前のモードに戻る
 void
 ReturnMode()
